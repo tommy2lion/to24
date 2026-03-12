@@ -1,0 +1,17 @@
+.vscode/*
+activate.sh
+*.html
+output/*
+venv*/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+# Python package build artifacts
+*.egg-info/
+
+*.swp
+*.swo
+*~
+.DS_Store
