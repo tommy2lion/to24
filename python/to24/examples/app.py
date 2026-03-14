@@ -6,8 +6,9 @@ Simple command-line application to demonstrate to24 library.
 import sys
 import os
 
+# keep next 2 line just for "don't forget debugging history"
 # Add the parent directory to path so we can import to24
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from to24 import To24
 
