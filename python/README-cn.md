@@ -15,6 +15,8 @@ cd /你的路径/to24/python
 ./tool/setup-python.sh
 ```
 
+> **提示:** 运行此脚本前请关闭 VSCode，以免扩展安装过程卡住。
+
 **该脚本的作用：**
 
 - 检测你的 Python 版本（例如 3.14 → `venv314`）

@@ -1,0 +1,44 @@
+（1）外层循环
+for perm in set(itertools.permutations(nums)):
+
+解释：
+- itertools.permutations(nums) 是 Python 标准库 itertools 中的一个函数，它生成 nums 中所有元素的排列（即所有可能的顺序）。
+- 例如，如果 nums 是 (1,2,3,4)，那么 permutations 会生成 24 种不同的排列（因为 4! = 24）。
+- 注意，这里外面套了 set()，目的是去重。如果 nums 中有重复数字，排列可能会有重复，用 set 可以去除重复的排列，避免重复计算。
+- 这个循环，每次迭代 perm 是其中一个排列，是一个元组，例如 (1,2,3,4) 或 (2,1,3,4) 等
+
+（2）内层循环
+for ops in itertools.product(self.ops.keys(), repeat=3):
+
+解释：
+-  self.ops 是一个字典，键是运算符字符，值是相应的函数（如 operator.add）。self.ops.keys() 返回字典的所有键，比如 ['+', '-', '*', '/']。
+- itertools.product 是 Python 标准库 itertools 中的一个函数，它生成多个可迭代对象的笛卡尔积，即所有可能的组合（相当于嵌套循环）。
+- 例如，itertools.product('AB', repeat=2) 会生成：('A', 'A')、('A', 'B')、('B', 'A')、('B', 'B')。
+- 因此，itertools.product(self.ops.keys(), repeat=3) 生成所有可能的运算符组合，长度为 3（因为四个数字需要三个运算符）。
+- 例如，如果运算符列表是 ['+', '-', '*', '/']，那么 product 会生成 4^3 = 64 种组合，每个组合是一个元组，如 ('+', '+', '+') 或 ('+', '-', '*') 等。
+
+（3）循环执行体：三步运算
+ val = self.ops[ops[0]](perm[0], perm[1])
+ val = self.ops[ops[1]](val, perm[2])
+ val = self.ops[ops[2]](val, perm[3])
+
+
+（4）如果计算得到了24，则输出计算的表达式
+    if abs(val - 24) < 1e-6:
+        if return_expr:
+            expr = f"(({perm[0]} {ops[0]} {perm[1]}) {ops[1]} {perm[2]}) {ops[2]} {perm[3]}"
+            return True, expr
+
+（5）捕获计算过程中可能出现的除0错误
+except ZeroDivisionError:
+    continue
+
+（6）你应该学到什么？
+- itertools.permutations 生成元素排列-----生成排列组合的A(n,m)
+- itertools.product  生成元素可重复排列-----类似排列组合的所有可能的可重复排列（n^m）
+- self.ops[ops[0]](perm[0], perm[1]) ------调用的方法，实际是一个ops内的数据成员（类似c语言的函数指针），ops是一个字典
+- python的try/except用法
+
+（7）扩展
+- itertools.combinations ---- 对应排列组合的无序、不重复的组合C(n,m)
+- itertools.combinations_with_replacement ---- 需要处理元素可重复的组合（例如允许同一个数字被多次使用）

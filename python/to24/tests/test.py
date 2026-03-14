@@ -16,7 +16,8 @@ import sys
 import os
 import unittest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# keep next line for debugging
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from to24 import To24
 # print(to24.__file__) 
 

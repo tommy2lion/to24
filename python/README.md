@@ -15,6 +15,8 @@ cd /YOUR_PATH/to24/python
 ./tool/setup-python.sh
 ```
 
+> **Tip:** Close VSCode before running this script to avoid potential hangs during extension installation.
+
 **What this script does:**
 
 - Detects your Python version (e.g., 3.14 → `venv314`)
