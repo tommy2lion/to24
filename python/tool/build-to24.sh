@@ -1,14 +1,14 @@
 #!/bin/bash
-# 一键打包 to24 示例应用为独立可执行文件（自动处理虚拟环境和包安装）
+# One-click build to24 example app as a standalone executable (auto-handles virtual env and package installation)
 
-set -e  # 遇到错误立即退出
+set -e  # Exit immediately on error
 
-# 获取脚本所在目录的绝对路径
+# Get absolute path of the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# 进入 python 目录（脚本的上层）
+# Enter the python directory (one level above the script)
 cd "$SCRIPT_DIR/.."
 
-# 如果虚拟环境未激活，则尝试激活
+# If virtual environment is not active, try to activate it
 if [ -z "$VIRTUAL_ENV" ]; then
     if [ -f "./activate.sh" ]; then
         echo "🔄 Activating virtual environment..."
@@ -19,11 +19,11 @@ if [ -z "$VIRTUAL_ENV" ]; then
     fi
 fi
 
-# 进入 to24 项目目录
+# Enter the to24 project directory
 cd to24
 
 echo "🧹 Uninstalling any editable to24 installation..."
-# 忽略卸载错误（如果包不存在）
+# Ignore uninstall errors (in case the package is not installed)
 pip uninstall to24 -y 2>/dev/null || true
 
 echo "📦 Installing to24 normally (non-editable)..."
