@@ -21,6 +21,8 @@ import unittest
 from to24 import To24
 # print(to24.__file__) 
 
+from to24.algorithm.set_based import SetBasedSolver
+
 class TestTo24(unittest.TestCase):
     def setUp(self):
         self.solver_simple = To24(algorithm='simple')
@@ -31,8 +33,7 @@ class TestTo24(unittest.TestCase):
         self.assertTrue(self.solver_simple.solve(1, 2, 3, 4))
         self.assertTrue(self.solver_simple.solve(4, 7, 1, 3))
         self.assertTrue(self.solver_simple.solve(6, 6, 6, 6))
-        # 3,3,8,8 is solvable but not by simple pattern
-        self.assertFalse(self.solver_simple.solve(3, 3, 8, 8))
+        self.assertTrue(self.solver_simple.solve(3, 3, 8, 8))
 
     def test_simple_no_solution(self):
         self.assertFalse(self.solver_simple.solve(1, 1, 1, 1))
@@ -44,5 +45,15 @@ class TestTo24(unittest.TestCase):
     def test_remove_dup_placeholder(self):
         self.assertFalse(self.solver_remove.solve(1, 2, 3, 4))
 
+    def test_set_based_solver(self):
+        solver = SetBasedSolver()
+        self.assertTrue(solver.solve(1, 2, 3, 4))
+        self.assertTrue(solver.solve(3, 3, 8, 8))  # classic dilemma
+        self.assertFalse(solver.solve(1, 1, 1, 1))
+        ok, expr = solver.solve(5, 5, 5, 1, return_expr=True)
+        self.assertTrue(ok)
+        self.assertAlmostEqual(eval(expr), 24)  # use assertAlmostEqual to avoid floating-point errors
+
+ 
 if __name__ == '__main__':
     unittest.main()
