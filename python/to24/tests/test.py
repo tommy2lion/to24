@@ -21,7 +21,7 @@ import unittest
 from to24 import To24
 # print(to24.__file__) 
 
-from to24.algorithm.set_based import SetBasedSolver
+from to24.algorithm.set_based import SetBased
 
 class TestTo24(unittest.TestCase):
     def setUp(self):
@@ -46,13 +46,35 @@ class TestTo24(unittest.TestCase):
         self.assertFalse(self.solver_remove.solve(1, 2, 3, 4))
 
     def test_set_based_solver(self):
-        solver = SetBasedSolver()
+        solver = SetBased()
         self.assertTrue(solver.solve(1, 2, 3, 4))
         self.assertTrue(solver.solve(3, 3, 8, 8))  # classic dilemma
         self.assertFalse(solver.solve(1, 1, 1, 1))
         ok, expr = solver.solve(5, 5, 5, 1, return_expr=True)
         self.assertTrue(ok)
         self.assertAlmostEqual(eval(expr), 24)  # use assertAlmostEqual to avoid floating-point errors
+
+    def test_set_based_solver_expression(self):
+        solver = SetBased()
+        test_cases = [
+            (1, 2, 3, 4),
+            (3, 3, 8, 8),
+            (5, 5, 5, 1),
+            (4, 4, 4, 4),
+            (6, 6, 6, 6),
+            (1, 1, 1, 1),  # no solution, should return False and an empty string
+        ]
+        for a, b, c, d in test_cases:
+            ok, expr = solver.solve(a, b, c, d, return_expr=True)
+            if ok:
+                # verify - the expression evaluates should be 24
+                from fractions import Fraction
+                print(f"Expression for ({a},{b},{c},{d}): {expr}")
+                # self.assertEqual(eval(expr), Fraction(24))
+                # self.assertAlmostEqual(eval(expr), 24, places=12)
+                self.assertAlmostEqual(eval(expr), 24, delta=1e-9)
+            else:
+                self.assertEqual(expr, "")
 
  
 if __name__ == '__main__':

@@ -31,6 +31,15 @@ def main():
     else:
         print(f"{nums} cannot make 24 (using simple algorithm)")
 
+    # Set-based algorithm
+    solver_set = To24(algorithm='set_based')
+    result3, expr3 = solver_set.solve(*nums, return_expr=True)
+    if result3:
+        print(f"Set-based algorithm: {nums} can make 24: {expr3}")
+    else:
+        print(f"Set-based algorithm: {nums} cannot make 24")
+
+
     # Try different algorithm
     solver_person = To24(algorithm='person_like')
     result2 = solver_person.solve(*nums)
