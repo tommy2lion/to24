@@ -1,6 +1,14 @@
 # person_like.py
 from typing import List
-from .think_rules import BaseRule, RuleStatus, AddAllRule, MultiplyAllRule, SpecialFractionRule, NoSolutionRule
+from .think_rules import (
+    BaseRule, 
+    RuleStatus,
+    NoSolutionRule,
+    SpecialFractionRule,
+    AddAllRule,
+    MultiplyAllRule,
+    Factor4To6Rule,
+)
 
 class PersonLike:
     """
@@ -15,6 +23,7 @@ class PersonLike:
             SpecialFractionRule(),           # memorized classic fraction solutions
             AddAllRule(),
             MultiplyAllRule(),
+            Factor4To6Rule,
             # More rules will be added later...
         ]
 
@@ -38,3 +47,5 @@ class PersonLike:
         from .simple import Simple
         simple = Simple()
         return simple.solve(a, b, c, d, return_expr)
+
+
