@@ -42,8 +42,11 @@ def main():
 
     # Try different algorithm
     solver_person = To24(algorithm='person_like')
-    result2 = solver_person.solve(*nums)
-    print(f"Person-like algorithm result: {result2}")
+    result2, expr2 = solver_set.solve(*nums, return_expr=True)
+    if result2:
+        print(f"Person-like algorithm: {nums} can make 24: {expr2}")
+    else:
+        print(f"Person-like algorithm: {nums} cannot make 24")
 
 if __name__ == "__main__":
     main()

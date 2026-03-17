@@ -38,9 +38,15 @@ class TestTo24(unittest.TestCase):
     def test_simple_no_solution(self):
         self.assertFalse(self.solver_simple.solve(1, 1, 1, 1))
 
-    def test_person_like_placeholder(self):
-        # Placeholder returns False
-        self.assertFalse(self.solver_person.solve(1, 2, 3, 4))
+    def test_person_like_rules(self):
+        solver = To24(algorithm='person_like')
+        # Should succeed via special fraction rule
+        self.assertTrue(solver.solve(5, 5, 5, 1))
+        self.assertTrue(solver.solve(3, 3, 8, 8))
+        # Should succeed via add all rule
+        self.assertTrue(solver.solve(1, 2, 3, 4))
+        # No solution
+        self.assertFalse(solver.solve(1, 1, 1, 1))
 
     def test_remove_dup_placeholder(self):
         self.assertFalse(self.solver_remove.solve(1, 2, 3, 4))

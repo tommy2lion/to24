@@ -4,4 +4,4 @@ from .remove_dup import RemoveDup
 from .set_based import SetBased
 
 
-__all__ = ["Simple", "PersonLike", "RemoveDup", "SetBasedBased"]
+__all__ = ["Simple", "PersonLike", "RemoveDup", "SetBased"]
