@@ -61,7 +61,10 @@ class SetBased:
                 result[v] = f"({expr1}+{expr2})"
                 # absolute subtraction
                 v = abs(val1 - val2)
-                result[v] = f"abs({expr1}-{expr2})"
+                if val1 >= val2:
+                    result[v] = f"({expr1}-{expr2})"
+                else:
+                    result[v] = f"({expr2}-{expr1})"
                 # multiplication
                 v = val1 * val2
                 result[v] = f"({expr1}*{expr2})"
