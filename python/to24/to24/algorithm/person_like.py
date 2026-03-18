@@ -10,20 +10,25 @@ from .think_rules import (
     Factor4To6Rule,
 )
 
+from .combo_cache import NumberCombo
+
 class PersonLike:
     """
-    Human‑like solver that tries a sequence of heuristic rules,
+    Human-like solver that tries a sequence of heuristic rules,
     falling back to the simple brute‑force solver if none succeed.
     """
 
     def __init__(self):
+        # Create a shared cache for number combinations
+        self._combo = NumberCombo()
+
         # Rule list in order of priority.
         self.rules: List[BaseRule] = [
             NoSolutionRule(),               # fast fail for known unsolvable
+            AddAllRule(),                    # simple addition
+            MultiplyAllRule(),               # simple multiplication
             SpecialFractionRule(),           # memorized classic fraction solutions
-            AddAllRule(),
-            MultiplyAllRule(),
-            Factor4To6Rule,
+            Factor4To6Rule(self._combo),
             # More rules will be added later...
         ]
 

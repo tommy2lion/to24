@@ -1,7 +1,9 @@
 # think_rules.py
 from enum import IntEnum
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Optional
 from fractions import Fraction
+from .combo_cache import NumberCombo
+
 
 class RuleStatus(IntEnum):
     """Result status for rule application."""
@@ -69,7 +71,7 @@ class NoSolutionRule(BaseRule):
     """
     def __init__(self):
         # Hardcoded set of unsolvable combinations (sorted tuples)
-        self._impossible_set = {
+        self._no_solution_set = {
             (1,1,1,1),
             (2,2,2,2),
             (7,7,7,7),
@@ -81,7 +83,7 @@ class NoSolutionRule(BaseRule):
 
     def apply(self, a: int, b: int, c: int, d: int, return_expr: bool = False) -> Tuple[RuleStatus, str]:
         key = tuple(sorted((a, b, c, d)))
-        if key in self._impossible_set:
+        if key in self._no_solution_set:
             return RuleStatus.IMPOSSIBLE, ""
         return RuleStatus.CONTINUE, ""
 
@@ -89,11 +91,10 @@ class Factor4To6Rule(BaseRule):
     """
     Rule: If there is a 4 among the numbers, check if the remaining three can make 6.
     This is a specific instance of the "see N, need M" rule family.
+    Uses a shared NumberCombo cache for efficiency.
     """
-    def __init__(self):
-        # Initialize a NumberCombo instance for efficiently checking combinations of three numbers.
-        # Note: For better resource sharing, this could be passed in from PersonLike later.
-        self._combo = NumberCombo()
+    def __init__(self, combo: NumberCombo):
+        self._combo = combo   # use the shared cache
 
     def apply(self, a: int, b: int, c: int, d: int, return_expr: bool = False) -> Tuple[RuleStatus, str]:
         numbers = [a, b, c, d]
@@ -108,13 +109,15 @@ class Factor4To6Rule(BaseRule):
 
                 # Convert remaining numbers to Fraction and obtain their result-to-expression map
                 remaining_frac = [Fraction(x) for x in remaining]
+                # Get the expression map for the three numbers
                 results_map = self._combo.three_results_map(*remaining_frac)
+                target = Fraction(target_result)
 
                 # Check if the target value 6 exists in the results map
-                if Fraction(target_result) in results_map:
+                if target in results_map:
                     if return_expr:
                         # Build the full expression: 4 * (sub-expression)
-                        sub_expr = results_map[Fraction(target_result)]
+                        sub_expr = results_map[target]
                         full_expr = f"4 * ({sub_expr})"
                         return RuleStatus.SUCCESS, full_expr
                     return RuleStatus.SUCCESS, ""
