@@ -124,3 +124,33 @@ class Factor4To6Rule(BaseRule):
 
         # No matching 4 found, or remaining numbers cannot produce 6
         return RuleStatus.CONTINUE, ""
+
+class Factor6To4Rule(BaseRule):
+    """
+    Rule: If there is a 6 among the numbers, check if the remaining three can make 4.
+    This is another instance of the "see N, need M" rule family.
+    Uses a shared NumberCombo cache for efficiency.
+    """
+    def __init__(self, combo: NumberCombo):
+        self._combo = combo
+
+    def apply(self, a: int, b: int, c: int, d: int, return_expr: bool = False) -> Tuple[RuleStatus, str]:
+        numbers = [a, b, c, d]
+        target_factor = 6
+        target_result = 4
+
+        for i in range(4):
+            if numbers[i] == target_factor:
+                remaining = numbers[:i] + numbers[i+1:]
+                remaining_frac = [Fraction(x) for x in remaining]
+                results_map = self._combo.three_results_map(*remaining_frac)
+                target = Fraction(target_result)
+
+                if target in results_map:
+                    if return_expr:
+                        sub_expr = results_map[target]
+                        full_expr = f"6 * ({sub_expr})"
+                        return RuleStatus.SUCCESS, full_expr
+                    return RuleStatus.SUCCESS, ""
+
+        return RuleStatus.CONTINUE, ""

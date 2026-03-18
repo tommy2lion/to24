@@ -8,6 +8,7 @@ from .think_rules import (
     AddAllRule,
     MultiplyAllRule,
     Factor4To6Rule,
+    Factor6To4Rule,
 )
 
 from .combo_cache import NumberCombo
@@ -29,6 +30,7 @@ class PersonLike:
             MultiplyAllRule(),               # simple multiplication
             SpecialFractionRule(),           # memorized classic fraction solutions
             Factor4To6Rule(self._combo),
+            Factor6To4Rule(self._combo),
             # More rules will be added later...
         ]
 
