@@ -49,6 +49,7 @@ class TestTo24(unittest.TestCase):
         self.assertFalse(solver.solve(1, 1, 1, 1))
         self.assertTrue(solver.solve(1, 4, 2, 9))  # use 4 to 6
         self.assertTrue(solver.solve(1, 3, 6, 9))  # use 6 to 4
+        self.assertTrue(solver.solve(1, 2, 3, 3))  # use 6 and 4
 
     def test_remove_dup_placeholder(self):
         self.assertFalse(self.solver_remove.solve(1, 2, 3, 4))

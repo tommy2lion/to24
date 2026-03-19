@@ -154,3 +154,52 @@ class Factor6To4Rule(BaseRule):
                     return RuleStatus.SUCCESS, ""
 
         return RuleStatus.CONTINUE, ""
+
+class Pair6And4Rule(BaseRule):
+    """
+    Rule: Try to split the four numbers into two pairs such that one pair makes 6 and the other makes 4,
+    then combine them with multiplication to get 24.
+    Uses NumberCombo cache to check pair results efficiently.
+    """
+    def __init__(self, combo: NumberCombo):
+        self._combo = combo
+
+    def apply(self, a: int, b: int, c: int, d: int, return_expr: bool = False) -> Tuple[RuleStatus, str]:
+        nums = [a, b, c, d]
+        # All possible unordered pairings (3 ways)
+        pairings = [
+            ((0,1), (2,3)),  # (a,b) and (c,d)
+            ((0,2), (1,3)),  # (a,c) and (b,d)
+            ((0,3), (1,2))   # (a,d) and (b,c)
+        ]
+        target1 = 6
+        target2 = 4
+        target_frac1 = Fraction(target1)
+        target_frac2 = Fraction(target2)
+
+        for idx1, idx2 in pairings:
+            # Pair 1
+            p1_vals = [nums[i] for i in idx1]
+            p2_vals = [nums[i] for i in idx2]
+            # Get result maps for both pairs
+            map1 = self._combo.two_results_map(Fraction(p1_vals[0]), Fraction(p1_vals[1]))
+            map2 = self._combo.two_results_map(Fraction(p2_vals[0]), Fraction(p2_vals[1]))
+
+            # Check if (map1 has 6 and map2 has 4) OR (map1 has 4 and map2 has 6)
+            if target_frac1 in map1 and target_frac2 in map2:
+                if return_expr:
+                    expr1 = map1[target_frac1]
+                    expr2 = map2[target_frac2]
+                    full_expr = f"({expr1}) * ({expr2})"
+                    return RuleStatus.SUCCESS, full_expr
+                return RuleStatus.SUCCESS, ""
+            if target_frac2 in map1 and target_frac1 in map2:
+                if return_expr:
+                    expr1 = map1[target_frac2]
+                    expr2 = map2[target_frac1]
+                    full_expr = f"({expr1}) * ({expr2})"
+                    return RuleStatus.SUCCESS, full_expr
+                return RuleStatus.SUCCESS, ""
+
+        return RuleStatus.CONTINUE, ""
+
